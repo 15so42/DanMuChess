@@ -248,7 +248,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 12210697}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -818,7 +818,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 207465708}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -1421,7 +1421,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 508645800}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -1648,7 +1648,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 578401584}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -1940,7 +1940,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 677860532}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -2593,7 +2593,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 858051449}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -3012,7 +3012,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 1049471094}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -3332,7 +3332,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 1180145006}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -3508,7 +3508,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 1219165154}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -4025,7 +4025,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 1350509530}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -4497,7 +4497,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 1560654593}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -4675,7 +4675,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 1590117628}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -4930,7 +4930,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 1647920761}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -5186,7 +5186,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 1726567675}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -6026,7 +6026,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 2058976800}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -6249,7 +6249,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2070945501}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 23.35, z: 0}
+  m_LocalPosition: {x: 0, y: 22.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -6535,7 +6535,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 2125719982}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0
@@ -6713,7 +6713,7 @@ MonoBehaviour:
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
-  m_renderer: {fileID: 1864336441}
+  m_renderer: {fileID: 2132862023}
   m_maskType: 0
   _SortingLayer: 0
   _SortingLayerID: 0

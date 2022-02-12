@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TeamId
+{
+    Red,
+    Black
+}
+
 [CreateAssetMenu(menuName="ScriptableObject/PlayerTeam")]
 public class PlayerTeam : ScriptableObject
 {
-    public int id = 0;
+    public TeamId teamId = TeamId.Red;
 
     public Color teamColor = Color.red;
+     
 
     public string teamColorString = "Red";
 

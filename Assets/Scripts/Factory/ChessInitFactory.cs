@@ -32,6 +32,12 @@ public class ChessInitFactory : MonoBehaviour
 
         var convertedGridPos=new Vector2(gridPos.y,gridPos.x);//转换坐标
         GameObject chessGo = Instantiate(pfb, gridManager.GetWorldPosByGirdIndex(convertedGridPos), Quaternion.identity);
+        if (playerTeam.teamId == TeamId.Red)
+        {
+            chessGo.transform.Rotate(Vector3.up,180);//红方棋子旋转180度
+        }
+
+        chessGo.transform.position = chessGo.transform.position + Vector3.up * 0.25f;
 
     }
 }

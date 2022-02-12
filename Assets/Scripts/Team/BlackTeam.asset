@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1841ddfd662cd8c4f866eae4452a8d72, type: 3}
   m_Name: BlackTeam
   m_EditorClassIdentifier: 
-  id: 0
+  teamId: 1
   teamColor: {r: 0, g: 0, b: 0, a: 1}
   teamColorString: Black
   teamName: "\u961F\u4F0D\u540D"
