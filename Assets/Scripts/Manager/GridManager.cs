@@ -19,7 +19,7 @@ public class GridManager : MonoBehaviour
     {
         grid = new Vector3[yCount, xCount];
         CalPositionToGrid();
-        SpawnColliders();
+        //SpawnColliders();
 
     }
 
