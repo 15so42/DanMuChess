@@ -19,15 +19,19 @@ public class ChessUnit : MonoBehaviour
     public PlayerTeam playerTeam;
 
     public ChessType chessType;
+    public Vector2 logicGridPos;//逻辑坐标
 
-    public void Start()
+    public ChessMoveRule moveRule;
+
+    public void Init(PlayerTeam playerTeam,  Vector2 logicGridPos)
     {
+        this.playerTeam = playerTeam;
+        this.logicGridPos = logicGridPos;
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public virtual void Move(Vector2 startPos, Vector2 targetPos)
     {
         
-    }
+    }    
 }

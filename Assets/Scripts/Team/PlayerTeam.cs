@@ -20,6 +20,9 @@ public class PlayerTeam : ScriptableObject
 
     public string teamName = "队伍名";
 
+    [Header("对面的棋子需要反向")]
+    public bool inverseDirection = false;
+
     [Header("实例化棋子路径")]
     public string instaniatePath = "";
 
@@ -31,7 +34,7 @@ public class PlayerTeam : ScriptableObject
 
         foreach (var chessPosStruct in initChessTable.posTable)
         {
-            Debug.Log(this+""+chessPosStruct+""+instaniatePath);
+            //Debug.Log(this+""+chessPosStruct+""+instaniatePath);
             chessInitFactory.SpawnChessUnit(this,chessPosStruct.chessType,chessPosStruct.pos,instaniatePath);
         }
         

@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public GridManager gridManager;
     public FightingManager fightingManager;
     //public UIManager uIManager;
-    public MoveChessManager moveChessManager;
+    public ChessMoveManager moveChessManager;
 
     public ChessInitFactory chessInitFactory;
 

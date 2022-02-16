@@ -17,7 +17,7 @@ public class GridManager : MonoBehaviour
     // Start is called before the first frame update
     public void Init()
     {
-        grid = new Vector3[yCount, xCount];
+        grid = new Vector3[yCount, xCount];//存储的信息
         CalPositionToGrid();
         //SpawnColliders();
 

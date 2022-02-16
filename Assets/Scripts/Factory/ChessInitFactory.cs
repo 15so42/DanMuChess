@@ -26,11 +26,11 @@ public class ChessInitFactory : MonoBehaviour
         if (path == "")
             Debug.LogError("棋子单位生成未配置实例化路径");
 
-        Debug.Log(path+"/"+playerTeam.teamColorString+"_"+chessType.ToString());
+        //Debug.Log(path+"/"+playerTeam.teamColorString+"_"+chessType.ToString());
 
         GameObject pfb = Resources.Load<GameObject>(path+"/"+playerTeam.teamColorString+"_"+chessType.ToString());//可优化存入缓存队列中，方便下次从缓存中再取用，减少Resource.Load次数
 
-        var convertedGridPos=new Vector2(gridPos.y,gridPos.x);//转换坐标
+        var convertedGridPos=new Vector2(gridPos.y,gridPos.x);//转换坐标,逻辑坐标转换为数组坐标
         GameObject chessGo = Instantiate(pfb, gridManager.GetWorldPosByGirdIndex(convertedGridPos), Quaternion.identity);
         if (playerTeam.teamId == TeamId.Red)
         {
@@ -38,6 +38,10 @@ public class ChessInitFactory : MonoBehaviour
         }
 
         chessGo.transform.position = chessGo.transform.position + Vector3.up * 0.25f;
+        
+        //配置单位信息
+        ChessUnit chessUnit = chessGo.AddComponent<ChessUnit>();
+        chessUnit.Init(playerTeam, gridPos);
 
     }
 }
