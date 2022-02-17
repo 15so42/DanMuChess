@@ -43,11 +43,15 @@ public class FightingManager : MonoBehaviour
         if (players.Count < maxPlayerCount && !players.Contains(player))
         {
             players.Add(player);
+            Debug.Log("玩家"+player.userName+"加入了游戏");
+            //TipsDialog.ShowDialog("玩家"+player.userName+"加入了游戏");
             if (players.Count == 2)
             {
-                Debug.Log("准备完毕，对局开始");
+                TipsDialog.ShowDialog("准备完毕，对局开始");
                 gameStatus = GameStatus.CountDownToFight;
                 
+                //CountDownDialog.ShowDialog(15);
+
             }
         }
     }

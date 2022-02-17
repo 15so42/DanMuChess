@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityTimer;
@@ -42,7 +43,12 @@ public class TipsDialog : Dialog<TipsDialogContext>
         withoutBgTxt.gameObject.SetActive(!dialogContext.withBg);
         withoutBgTxt.text = dialogContext.tipsContext;
         withoutBgTxt.color = dialogContext.isWarning ? Color.red : Color.white;
+        
         tipsTxt.text = dialogContext.tipsContext;
+
+        tipsTxt.transform.DOLocalJump(tipsTxt.transform.localPosition + Vector3.up * 100, 5, 2, 2);
+        withoutBgTxt.transform.DOLocalJump(tipsTxt.transform.localPosition + Vector3.up * 100, 5, 2, 2);
+        frameImage.transform.DOLocalJump(tipsTxt.transform.localPosition + Vector3.up * 100, 5, 2, 2);
         frameImage.transform.localPosition = new Vector2(0,dialogContext.offsetY);
         Timer.Register(2f, () => { Close(); });
     }
