@@ -25,7 +25,7 @@ public class TipsDialog : Dialog<TipsDialogContext>
     [SerializeField] private Text tipsTxt;
     [SerializeField] private Text withoutBgTxt;
 
-    public static void ShowDialog(string tips, bool withBg = true, bool isWarning = false, int offsetY = 0)
+    public static void ShowDialog(string tips,Action onClose, bool withBg = true, bool isWarning = false, int offsetY = 0)
     {
         var dialog = GetShowingDialog(nameof(TipsDialog)) as TipsDialog;
         if (dialog != null && (dialog && dialog.tipsTxt.text == tips))
@@ -33,7 +33,7 @@ public class TipsDialog : Dialog<TipsDialogContext>
             return;
         }
 
-        DialogUtil.ShowDialogWithContext(nameof(TipsDialog), new TipsDialogContext(tips, withBg, isWarning, offsetY));
+        DialogUtil.ShowDialogWithContext(nameof(TipsDialog), new TipsDialogContext(tips, withBg, isWarning, offsetY),null,onClose);
     }
 
     public override void Show()

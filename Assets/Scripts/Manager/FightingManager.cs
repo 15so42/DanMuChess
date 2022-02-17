@@ -47,11 +47,12 @@ public class FightingManager : MonoBehaviour
             //TipsDialog.ShowDialog("玩家"+player.userName+"加入了游戏");
             if (players.Count == 2)
             {
-                TipsDialog.ShowDialog("准备完毕，对局开始");
-                gameStatus = GameStatus.CountDownToFight;
+                TipsDialog.ShowDialog("准备完毕，对局开始", () =>
+                {
+                    gameStatus = GameStatus.CountDownToFight;
+                    CountDownDialog.ShowDialog(15);
+                });
                 
-                //CountDownDialog.ShowDialog(15);
-
             }
         }
     }
