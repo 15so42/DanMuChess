@@ -9,9 +9,13 @@ public class ChessMoveManager : MonoBehaviour
     // Start is called before the first frame update
     public void Init(int xCount,int yCount)//yCount为行，xCount为列
     {
-        chessTable = new ChessUnit[yCount, xCount];
+        chessTable = new ChessUnit[xCount, yCount];//与逻辑坐标系统一,获取世界坐标时再转换
     }
 
+    public void SetChess(Vector2Int logicGridPos,ChessUnit chessUnit)
+    {
+        chessTable[logicGridPos.x, logicGridPos.y] = chessUnit;
+    }
     public bool IsExitChess(Vector2Int logicGridPos)
     {
         

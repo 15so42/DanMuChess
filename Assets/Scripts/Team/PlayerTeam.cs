@@ -11,6 +11,7 @@ public enum TeamId
 [CreateAssetMenu(menuName="ScriptableObject/PlayerTeam")]
 public class PlayerTeam : ScriptableObject
 {
+    
     public TeamId teamId = TeamId.Red;
 
     public Color teamColor = Color.red;

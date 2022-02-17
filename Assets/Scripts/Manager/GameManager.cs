@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public GridManager gridManager;
     public FightingManager fightingManager;
     //public UIManager uIManager;
-    public ChessMoveManager moveChessManager;
+    public ChessMoveManager chessMoveManager;
 
     public ChessInitFactory chessInitFactory;
 
@@ -22,8 +22,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        chessInitFactory.Init();
-        gridManager.Init();
+        gridManager.Init(this);
+        chessInitFactory.Init(this);
+        
         fightingManager.Init();
         //moveChessManager由GridManager初始化
         //moveChessManager.Init();

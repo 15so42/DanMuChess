@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public struct ChessUnitPos
 {
-    public Vector2 pos;
+    public Vector2Int pos;
     public ChessType chessType;
 
 };

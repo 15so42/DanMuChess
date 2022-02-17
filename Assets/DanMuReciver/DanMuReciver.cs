@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using UnityEngine;
 
+
 public class DanMuReciver : MonoBehaviour
 {
     //弹幕接收器
@@ -69,7 +70,9 @@ public class DanMuReciver : MonoBehaviour
                 {
                     string name = ret.data.room[i].nickname;
                     string text = ret.data.room[i].text;
+                    string str = name + " [" + time + "]: " + text;
                     Debug.Log(name + " [" + time + "]: " + text);
+                    EventCenter.Broadcast(EnumEventType.OnDanMuReceived,name,uid,time,text);
                     //更新上一次读取的弹幕时间
                     lastReadUnix = unix;
                     lastReadUid = uid;
