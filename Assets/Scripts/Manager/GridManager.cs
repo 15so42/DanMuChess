@@ -12,6 +12,8 @@ public class GridManager : MonoBehaviour
 
     public GameObject chessGridColliderPfb;
 
+    public ChessMoveManager chessMoveManager;
+
     Vector3[,] grid;
 
     // Start is called before the first frame update
@@ -19,6 +21,10 @@ public class GridManager : MonoBehaviour
     {
         grid = new Vector3[yCount, xCount];//存储的信息
         CalPositionToGrid();
+
+        chessMoveManager = GameManager.Instance.moveChessManager;
+        chessMoveManager.Init(xCount, yCount);
+
         //SpawnColliders();
 
     }

@@ -25,7 +25,8 @@ public class GameManager : MonoBehaviour
         chessInitFactory.Init();
         gridManager.Init();
         fightingManager.Init();
-        moveChessManager.Init();
+        //moveChessManager由GridManager初始化
+        //moveChessManager.Init();
         
     }
 

@@ -38,11 +38,11 @@ public class ChessMoveRuleMa : ChessMoveRule
         //判断绊脚马
         if (Mathf.Abs((int)startPos.y-(int)endPos.y)==2)//上下走
         {
-            if (endPos.y>startPos.y && chessMoveManager.IsExitChess(new Vector2(startPos.x, startPos.y + 1)))
+            if (endPos.y>startPos.y && chessMoveManager.IsExitChess(new Vector2Int(startPos.x, startPos.y + 1)))
             {
                 return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"绊脚马");
             }
-            if (endPos.y<startPos.y && chessMoveManager.IsExitChess(new Vector2(startPos.x, startPos.y - 1)))
+            if (endPos.y<startPos.y && chessMoveManager.IsExitChess(new Vector2Int(startPos.x, startPos.y - 1)))
             {
                 return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"绊脚马");
             }
@@ -50,11 +50,11 @@ public class ChessMoveRuleMa : ChessMoveRule
         
         if (Mathf.Abs((int)startPos.x-(int)endPos.x)==2)//向上走
         {
-            if (endPos.x>startPos.x && chessMoveManager.IsExitChess(new Vector2(startPos.x+1, startPos.y)))
+            if (endPos.x>startPos.x && chessMoveManager.IsExitChess(new Vector2Int(startPos.x+1, startPos.y)))
             {
                 return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"绊脚马");
             }
-            if (endPos.x<startPos.x && chessMoveManager.IsExitChess(new Vector2(startPos.x-1, startPos.y)))
+            if (endPos.x<startPos.x && chessMoveManager.IsExitChess(new Vector2Int(startPos.x-1, startPos.y)))
             {
                 return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"绊脚马");
             }

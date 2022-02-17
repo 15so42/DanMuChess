@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ce87d4f6e98c864eb8bf42c73a07d7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTeam: {fileID: 0}
-  chessType: 0
+  playerTeam: {fileID: 11400000, guid: 80f3bd64a628400419f7d5cb0700da0d, type: 2}
+  chessType: 6
   logicGridPos: {x: 0, y: 0}
-  moveRule: {fileID: 0}
+  moveRule: {fileID: 11400000, guid: d63a91227ac5caf42b6a45823ec7b6d9, type: 2}

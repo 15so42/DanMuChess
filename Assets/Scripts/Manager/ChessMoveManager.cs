@@ -5,16 +5,22 @@ using UnityEngine;
 public class ChessMoveManager : MonoBehaviour
 {
     //创建一个二维数组存放实际的棋盘数据
-    
+    ChessUnit[,] chessTable;
     // Start is called before the first frame update
-    public void Init()
+    public void Init(int xCount,int yCount)//yCount为行，xCount为列
     {
-        
+        chessTable = new ChessUnit[yCount, xCount];
     }
 
-    public bool IsExitChess(Vector2 logicGridPos)
+    public bool IsExitChess(Vector2Int logicGridPos)
     {
-        return true;
+        
+        return chessTable[logicGridPos.y, logicGridPos.x]==null;
+    }
+
+    public ChessUnit GetChessUnit(Vector2Int logicGridPos)
+    {
+        return chessTable[logicGridPos.y, logicGridPos.x];
     }
 
     public void MoveChessToPos()

@@ -88,6 +88,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1770808728571293743}
+  - component: {fileID: 315028227330366622}
   m_Layer: 0
   m_Name: "Black_\u76F8"
   m_TagString: Untagged
@@ -110,3 +111,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &315028227330366622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987636412674009596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ce87d4f6e98c864eb8bf42c73a07d7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTeam: {fileID: 11400000, guid: 80f3bd64a628400419f7d5cb0700da0d, type: 2}
+  chessType: 2
+  logicGridPos: {x: 0, y: 0}
+  moveRule: {fileID: 11400000, guid: e015e40aada025a4c8461fe36adb8388, type: 2}
