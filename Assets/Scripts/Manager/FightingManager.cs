@@ -1,8 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Timers;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public enum GameStatus
 {
@@ -29,13 +33,19 @@ public class FightingManager : MonoBehaviour
     [HideInInspector]
     public PlayerTeam nowTeam ;
     
-    public void Init()
+    //UIManager
+    public GameManager gameManager;
+    public UIManager uiManager;
+
+    public void Init(GameManager gameManager)
     {
         PlaceInitChess();
         EventCenter.AddListener<string,int,string,string>(EnumEventType.OnDanMuReceived,OnDanMuReceived);
         gameStatus = GameStatus.WaitingJoin;
 
         nowTeam = redTeam;
+        this.gameManager = gameManager;
+        uiManager = gameManager.uiManager;
     }
 
     public void JoinGame(Player player)
@@ -43,8 +53,13 @@ public class FightingManager : MonoBehaviour
         if (players.Count < maxPlayerCount && !players.Contains(player))
         {
             players.Add(player);
+            
             Debug.Log("玩家"+player.userName+"加入了游戏");
-            //TipsDialog.ShowDialog("玩家"+player.userName+"加入了游戏");
+            TipsDialog.ShowDialog("玩家"+player.userName+"加入了游戏",null);
+            //同步UI
+            uiManager.OnPlayerJoined(player,this);
+            
+            //游戏开始判断
             if (players.Count == 2)
             {
                 TipsDialog.ShowDialog("准备完毕，对局开始", () =>
@@ -72,22 +87,23 @@ public class FightingManager : MonoBehaviour
     private void OnDanMuReceived(string userName,int uid,string time,string text )
     {
         //找到队伍
-        if (text.Split(' ')[0] == "!加入")
+        if (text.Split(' ')[0] == "!加入"||text.Split(' ')[0] == "!加入游戏")
         {
             if (gameStatus == GameStatus.WaitingJoin)
-            { 
-                JoinGame(new Player(uid,userName,teams[players.Count]));
+            {
+                var playerAccount = BiliUserInfoQuerier.Query(uid);
+                if (playerAccount.code == 0)
+                {
+                    JoinGame(new Player(uid, userName, teams[players.Count], playerAccount.data.face,playerAccount.data.top_photo));
+                }
+                else
+                {
+                    TipsDialog.ShowDialog("读取用户信息ErrorCode:"+playerAccount.code,null);
+                }
             }
         }
         
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    }  
 }
 
 public class Player
@@ -95,10 +111,14 @@ public class Player
     public int uid;
     public string userName;
     public PlayerTeam playerTeam;
-    public Player(int uid, string userName, PlayerTeam playerTeam)
+    public string faceUrl;
+    public string top_photo;
+    public Player(int uid, string userName, PlayerTeam playerTeam,string faceUrl,string top_photo)
     {
         this.uid = uid;
         this.userName = userName;
         this.playerTeam = playerTeam;
+        this.faceUrl = faceUrl;
+        this.top_photo = top_photo;
     }
 }

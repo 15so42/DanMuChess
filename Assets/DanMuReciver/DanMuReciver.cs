@@ -60,9 +60,12 @@ public class DanMuReciver : MonoBehaviour
 
             ResponseResult ret = JsonMapper.ToObject<ResponseResult>(json);
 
+            
+            
             //从头读取每条弹幕，直到时间大于上次读取时间，
             for(int i = 0; i < ret.data.room.Count; i++)
             {
+                
                 string time= ret.data.room[i].timeline;
                 int uid = ret.data.room[i].uid;
                 long unix = GetUnixTime(time);

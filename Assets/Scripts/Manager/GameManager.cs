@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
 
     public ChessInitFactory chessInitFactory;
 
+    public UIManager uiManager;
+
 
     private void Awake()
     {
@@ -24,8 +26,9 @@ public class GameManager : MonoBehaviour
     {
         gridManager.Init(this);
         chessInitFactory.Init(this);
+        uiManager.Init(this);
+        fightingManager.Init(this);
         
-        fightingManager.Init();
         //moveChessManager由GridManager初始化
         //moveChessManager.Init();
         
