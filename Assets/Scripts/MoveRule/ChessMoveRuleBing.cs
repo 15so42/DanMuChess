@@ -7,36 +7,47 @@ using UnityEngine;
 public class ChessMoveRuleBing : ChessMoveRule
 {
 
-    
+    /// <summary>
+    /// 移动到自身或者棋盘外在更上层判断
+    /// </summary>
+    /// <param name="playerTeam"></param>
+    /// <param name="startPos"></param>
+    /// <param name="endPos"></param>
+    /// <returns></returns>
     public override ChessMoveResultStruct Check( PlayerTeam playerTeam, Vector2Int startPos, Vector2Int endPos)
     {
 
         if (playerTeam.inverseDirection)//反向方，只能前进
         {
-            if (endPos.y > startPos.y || endPos.y>=5)
+            
+            //new
+            if (startPos.y >= 5 && endPos.y < startPos.y && endPos.x == startPos.x &&
+                Vector2.Distance(startPos, endPos) < 1.4f)
             {
-                return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"走法错误");
+                return new ChessMoveResultStruct(CheckMoveResultCode.Success,"移动");
             }
-
-            if (endPos.y < 5 && Math.Abs( Vector2.Distance(startPos, endPos)) <1.4f)
+            
+            if (startPos.y < 5 && endPos.y<=startPos.y && Vector2.Distance(startPos, endPos) < 1.4f)
             {
                 return new ChessMoveResultStruct(CheckMoveResultCode.Success,"移动");
             }
         }
         else
         {
-            if (endPos.y < startPos.y || endPos.y<=4)
+            //new
+            if (startPos.y <= 4 && endPos.y > startPos.y && endPos.x == startPos.x &&
+                Vector2.Distance(startPos, endPos) < 1.4f)
             {
-                return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"走法错误");
+                return new ChessMoveResultStruct(CheckMoveResultCode.Success,"移动");
             }
-
-            if (endPos.y >= 5 && Math.Abs( Vector2.Distance(startPos, endPos)) <1.4f)
+            
+            if (startPos.y > 4 && endPos.y>=startPos.y && Vector2.Distance(startPos, endPos) < 1.4f)
             {
                 return new ChessMoveResultStruct(CheckMoveResultCode.Success,"移动");
             }
         }
        
         
-        return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"未知错误");
+        return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"走法错误");
     }
 }

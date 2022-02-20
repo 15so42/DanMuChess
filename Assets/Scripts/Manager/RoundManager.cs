@@ -20,6 +20,8 @@ public class RoundManager
     private FightingManager fightingManager;
     private ChessMoveManager chessMoveManager;
     private UIManager uiManager;
+
+    public UnityTimer.Timer timer;//回合计时器，在下棋后引起的回合结束时需要手动关闭相应timer,也要注意UI的timer
     
     public void Init(GameManager gameManager ,List<Player> players)
     {
@@ -49,7 +51,7 @@ public class RoundManager
     {
         nowPlayer = GetPlayerByRound();
         uiManager.StartNewRound(nowPlayer.uid);
-        Timer.Register(fightingManager.roundDuration, () =>
+        timer=Timer.Register(fightingManager.roundDuration, () =>
         {
             RoundOver(nowPlayer.uid);//结束自己回合
             StartNewRound();
@@ -67,6 +69,8 @@ public class RoundManager
     {
         roundCount++;
         uiManager.RoundOver(uid);
+        timer.Cancel();
+        StartNewRound();
     }
     
     
@@ -107,19 +111,14 @@ public class RoundManager
                     {
                         uiManager.ShowMessage(uid, MoveErrorMsg);
                         return;
-                    }
-
-                    try
-                    {
-                        chessMoveManager.MoveChessToPos(nowPlayer.playerTeam,new Vector2Int(startX, startY), new Vector2Int(endX, endY));
+                    }   
+                    if(startX==endX && startY==endY)
+                        return;
+                    bool moveRet=chessMoveManager.MoveChessToPos(nowPlayer.playerTeam,new Vector2Int(startX, startY), new Vector2Int(endX, endY));
+                    if(moveRet){
                         RoundOver(uid); //回合结束
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogError(e);
-                        uiManager.ShowMessage(uid, MoveErrorMsg+e);
-                        
-                    }
+                    }  
+                    uiManager.ShowMessage(uid, text);
                    
                 }
                 

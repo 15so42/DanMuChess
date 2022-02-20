@@ -26,6 +26,10 @@ public class AccountUI : MonoBehaviour
     private FightingManager fightingManager;
 
     public float chatItemXOffset = 0;
+    
+    //协程变量
+    Coroutine countDownCoroutine;
+    
     private void Start()
     {
         fillImage.fillAmount = 0;
@@ -49,13 +53,14 @@ public class AccountUI : MonoBehaviour
     {
         fillImage.fillAmount = 0;
         countDownText.text = "";
+        StopCoroutine(countDownCoroutine);
     }
 
     public void StartNewRound()
     {
         fillImage.fillAmount = 1;
         countDownText.text = fightingManager.roundDuration+"";
-        StartCoroutine(CountDown(fightingManager.roundDuration));
+        countDownCoroutine=StartCoroutine(CountDown(fightingManager.roundDuration));
     }
 
     IEnumerator CountDown(int duration)
@@ -63,10 +68,11 @@ public class AccountUI : MonoBehaviour
         int count = duration;
         while (count > 0)
         {
-            yield return new WaitForSeconds(1);
             fillImage.fillAmount = (float)count / duration;
             countDownText.text = count.ToString();
             count--;
+            yield return new WaitForSeconds(1);
+            
         }
         RoundOver();//UI只负责显示，跳转到对面回合在RoundManager里跳转
     }
@@ -82,7 +88,7 @@ public class AccountUI : MonoBehaviour
         
         UnityTimer.Timer.Register(10, ()=>
         {
-            //animator.Play("FadeOut");
+            animator.Play("FadeOut");
             Destroy(chatItem,1);
         });
         

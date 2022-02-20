@@ -2633,7 +2633,7 @@ MonoBehaviour:
   nowTeam: {fileID: 0}
   gameManager: {fileID: 0}
   uiManager: {fileID: 0}
-  roundDuration: 45
+  roundDuration: 10
 --- !u!1 &836750629
 GameObject:
   m_ObjectHideFlags: 0
@@ -2775,6 +2775,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   gridManager: {fileID: 714476334}
+  redSpawnTable:
+  - chessType: 0
+    pfb: {fileID: 7896402054913606676, guid: d663506f1aba42e488295347e9b77990, type: 3}
+  - chessType: 1
+    pfb: {fileID: 1148393423036989031, guid: 5363dc15e03f55a4485805b07322dbae, type: 3}
+  - chessType: 2
+    pfb: {fileID: 4825477170359696976, guid: 9c0dcfdb0c0588e4cad9e23ad0178e08, type: 3}
+  - chessType: 3
+    pfb: {fileID: 109868619882298841, guid: 1dc07e0780a5adb489fc62029adaa08a, type: 3}
+  - chessType: 4
+    pfb: {fileID: 5857283656679162432, guid: 87c5281d405ff6a48851a08f708c0ee7, type: 3}
+  - chessType: 5
+    pfb: {fileID: 283558269232758610, guid: 96048c6dd63419d4ba8a5b2bab8ba91a, type: 3}
+  - chessType: 6
+    pfb: {fileID: 9026016060867822607, guid: 053e4cc9d9628224eb2fc0ec73965e33, type: 3}
+  blackSpawnTable:
+  - chessType: 0
+    pfb: {fileID: 8332417129189969261, guid: 9b17db90d9404f141bf337387857ca6d, type: 3}
+  - chessType: 1
+    pfb: {fileID: 4996874236510306917, guid: 976f21287a994e24e98b8571035b9aa0, type: 3}
+  - chessType: 2
+    pfb: {fileID: 1987636412674009596, guid: ea2b9b86004144049a8db7b66051d0e8, type: 3}
+  - chessType: 3
+    pfb: {fileID: 322267807854913737, guid: d4fd6def8d7392c43a527aa9ca8c320d, type: 3}
+  - chessType: 4
+    pfb: {fileID: 3269624966669273924, guid: b0cd64fc39385d7449f5c32750dd47a9, type: 3}
+  - chessType: 5
+    pfb: {fileID: 1650572959057538294, guid: f5feca91c10df16438143d3925ccad7a, type: 3}
+  - chessType: 6
+    pfb: {fileID: 2813834008936462970, guid: 1fa41ef7661f2b145939663f41da6974, type: 3}
 --- !u!1 &858051444
 GameObject:
   m_ObjectHideFlags: 0

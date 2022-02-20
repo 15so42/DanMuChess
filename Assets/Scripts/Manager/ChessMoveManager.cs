@@ -26,8 +26,7 @@ public class ChessMoveManager : MonoBehaviour
     }
     public bool IsExitChess(Vector2Int logicGridPos)
     {
-        
-        return chessTable[logicGridPos.x, logicGridPos.y]==null;
+        return chessTable[logicGridPos.x, logicGridPos.y]!=null;
     }
 
     public ChessUnit GetChessUnit(Vector2Int logicGridPos)
@@ -35,13 +34,20 @@ public class ChessMoveManager : MonoBehaviour
         return chessTable[logicGridPos.x, logicGridPos.y];
     }
 
-    public void MoveChessToPos(PlayerTeam playerTeam,Vector2Int startGridPos,Vector2Int endPos)
+    /// <summary>
+    /// 返回是否成功
+    /// </summary>
+    /// <param name="playerTeam"></param>
+    /// <param name="startGridPos"></param>
+    /// <param name="endPos"></param>
+    /// <returns></returns>
+    public bool MoveChessToPos(PlayerTeam playerTeam,Vector2Int startGridPos,Vector2Int endPos)
     {
         ChessUnit chessUnit = GetChessUnit(startGridPos);
         if (chessUnit == null)
         {
             TipsDialog.ShowDialog("无可移动棋子",null);
-            return;
+            return false;
         }
 
         var ruleResult = chessUnit.moveRule.Check(playerTeam, startGridPos, endPos);
@@ -52,14 +58,14 @@ public class ChessMoveManager : MonoBehaviour
                 SetChess(startGridPos,null);
                 SetChess(endPos,chessUnit);
                 chessUnit.OnMoveEnd(endPos);
+                
             });
+            return true;
         }
-        else
-        {
-            TipsDialog.ShowDialog(ruleResult.message,null);
-        }
-       
         
+        TipsDialog.ShowDialog(ruleResult.message,null);
+        return false;
+
     }
     // Update is called once per frame
     void Update()
