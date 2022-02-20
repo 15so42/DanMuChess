@@ -27,6 +27,7 @@ public class ChessUnit : MonoBehaviour
     {
         this.playerTeam = playerTeam;
         this.logicGridPos = logicGridPos;
+        moveRule.Init(GameManager.Instance.chessMoveManager);
         
     }
 

@@ -68,6 +68,8 @@ public class RoundManager
         roundCount++;
         uiManager.RoundOver(uid);
     }
+    
+    
 
     //解析命令
     private void ParseCommand(int uid,string text)
@@ -109,12 +111,13 @@ public class RoundManager
 
                     try
                     {
-                        chessMoveManager.MoveChessToPos(new Vector2Int(startX, startY), new Vector2Int(endX, endY));
+                        chessMoveManager.MoveChessToPos(nowPlayer.playerTeam,new Vector2Int(startX, startY), new Vector2Int(endX, endY));
                         RoundOver(uid); //回合结束
                     }
                     catch (Exception e)
                     {
-                        uiManager.ShowMessage(uid, MoveErrorMsg);
+                        Debug.LogError(e);
+                        uiManager.ShowMessage(uid, MoveErrorMsg+e);
                         
                     }
                    

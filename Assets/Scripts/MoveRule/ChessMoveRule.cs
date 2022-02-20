@@ -14,9 +14,9 @@ public enum CheckMoveResultCode
 
 public struct ChessMoveResultStruct
 {
-    private CheckMoveResultCode code;
+    public CheckMoveResultCode code;
 
-    private string message;
+    public string message;
 
     public ChessMoveResultStruct(CheckMoveResultCode code,string message)
     {
@@ -33,5 +33,12 @@ public abstract class ChessMoveRule : ScriptableObject
         this.chessMoveManager = chessMoveManager;
     }
 
+    /// <summary>
+    /// 需要先Init再使用
+    /// </summary>
+    /// <param name="playerTeam"></param>
+    /// <param name="startPos"></param>
+    /// <param name="endPos"></param>
+    /// <returns></returns>
     public abstract ChessMoveResultStruct Check(PlayerTeam playerTeam, Vector2Int startPos, Vector2Int endPos);
 }
