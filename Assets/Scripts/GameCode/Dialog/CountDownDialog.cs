@@ -19,7 +19,7 @@ public class CountDownDialog : Dialog<CountDownDialogContext>
 {
     public Text text;
      
-    public static void ShowDialog(int duration)
+    public static void ShowDialog(int duration,Action onClose)
     {
         var dialog = GetShowingDialog(nameof(CountDownDialog)) as CountDownDialog;
         if (dialog != null)
@@ -27,14 +27,14 @@ public class CountDownDialog : Dialog<CountDownDialogContext>
             return;
         }
 
-        DialogUtil.ShowDialogWithContext(nameof(CountDownDialog), new CountDownDialogContext(duration));
+        DialogUtil.ShowDialogWithContext(nameof(CountDownDialog), new CountDownDialogContext(duration),null,onClose);
     }
 
-    public override void Show(Action onComplete)
+    public override void Show()
     {
         
-        base.Show(onComplete);
-        UnityTimer.Timer.Register(dialogContext.duration, ()=>{Close();}, (time) =>
+        base.Show();
+        UnityTimer.Timer.Register(dialogContext.duration, Close, (time) =>
         {
             text.text = (dialogContext.duration - (int) time)+"";
         } );

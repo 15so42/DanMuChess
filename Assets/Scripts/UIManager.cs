@@ -16,6 +16,23 @@ public class UIManager : MonoBehaviour
 
     public void OnPlayerJoined(Player player,FightingManager fightingManager)
     {
-        accountUis[fightingManager.players.Count].OnPlayerJoined(player);
+        accountUis[fightingManager.players.Count-1].OnPlayerJoined(player);
     }
+
+    public void ShowMessage(int uid, string message)
+    {
+        accountUis.Find(x => x.player.uid == uid).ShowMessage(message);
+    }
+
+    public void StartNewRound(int uid)
+    {
+        accountUis.Find(x => x.player.uid == uid).StartNewRound();
+    }
+
+    public void RoundOver(int uid)
+    {
+        accountUis.Find(x => x.player.uid == uid).RoundOver();
+    }
+    
+    
 }

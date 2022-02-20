@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Timers;
 using UnityEngine;
 using UnityEngine.Events;
@@ -36,6 +37,10 @@ public class FightingManager : MonoBehaviour
     //UIManager
     public GameManager gameManager;
     public UIManager uiManager;
+    //Round Manager
+    public RoundManager roundManager;
+
+    [Header("回合时间")] public int roundDuration=45;
 
     public void Init(GameManager gameManager)
     {
@@ -46,11 +51,12 @@ public class FightingManager : MonoBehaviour
         nowTeam = redTeam;
         this.gameManager = gameManager;
         uiManager = gameManager.uiManager;
+        
     }
 
     public void JoinGame(Player player)
     {
-        if (players.Count < maxPlayerCount && !players.Contains(player))
+        if (players.Count < maxPlayerCount && !players.Contains(player) && players.Find(x=>x.uid==player.uid)==null )
         {
             players.Add(player);
             
@@ -59,13 +65,22 @@ public class FightingManager : MonoBehaviour
             //同步UI
             uiManager.OnPlayerJoined(player,this);
             
+            
+            
             //游戏开始判断
             if (players.Count == 2)
             {
                 TipsDialog.ShowDialog("准备完毕，对局开始", () =>
                 {
                     gameStatus = GameStatus.CountDownToFight;
-                    CountDownDialog.ShowDialog(15);
+                    CountDownDialog.ShowDialog(3, () =>
+                    {
+                        TipsDialog.ShowDialog("红方先手",null);
+                        gameStatus = GameStatus.Playing;
+                        roundManager=new RoundManager();
+                        roundManager.Init(gameManager,players);
+                        
+                    });
                 });
                 
             }
@@ -87,18 +102,18 @@ public class FightingManager : MonoBehaviour
     private void OnDanMuReceived(string userName,int uid,string time,string text )
     {
         //找到队伍
-        if (text.Split(' ')[0] == "!加入"||text.Split(' ')[0] == "!加入游戏")
+        if (text.Split(' ')[0] == "加入"||text.Split(' ')[0] == "加入游戏")
         {
             if (gameStatus == GameStatus.WaitingJoin)
             {
                 var playerAccount = BiliUserInfoQuerier.Query(uid);
-                if (playerAccount.code == 0)
+                if (playerAccount.code == 0 && players.Count<maxPlayerCount)
                 {
                     JoinGame(new Player(uid, userName, teams[players.Count], playerAccount.data.face,playerAccount.data.top_photo));
                 }
                 else
                 {
-                    TipsDialog.ShowDialog("读取用户信息ErrorCode:"+playerAccount.code,null);
+                    TipsDialog.ShowDialog("Error:"+playerAccount.code+","+playerAccount.message,null);
                 }
             }
         }

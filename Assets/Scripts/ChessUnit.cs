@@ -33,5 +33,10 @@ public class ChessUnit : MonoBehaviour
     public virtual void Move(Vector2 startPos, Vector2 targetPos)
     {
         
-    }    
+    }
+
+    public virtual void OnMoveEnd(Vector2Int endPos)
+    {
+        this.logicGridPos = endPos;
+    }
 }

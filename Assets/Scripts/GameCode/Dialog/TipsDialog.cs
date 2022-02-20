@@ -28,12 +28,24 @@ public class TipsDialog : Dialog<TipsDialogContext>
     public static void ShowDialog(string tips,Action onClose, bool withBg = true, bool isWarning = false, int offsetY = 0)
     {
         var dialog = GetShowingDialog(nameof(TipsDialog)) as TipsDialog;
-        if (dialog != null && (dialog && dialog.tipsTxt.text == tips))
+        if (dialog != null)
         {
-            return;
+            if (dialog.tipsTxt.text == tips)
+            {
+                return;
+            }
+
+            UnityTimer.Timer.Register(2, () =>
+            {
+                DialogUtil.ShowDialogWithContext(nameof(TipsDialog),
+                    new TipsDialogContext(tips, withBg, isWarning, offsetY), null, onClose);
+            });
+        }
+        else
+        {
+            DialogUtil.ShowDialogWithContext(nameof(TipsDialog), new TipsDialogContext(tips, withBg, isWarning, offsetY),null,onClose);
         }
 
-        DialogUtil.ShowDialogWithContext(nameof(TipsDialog), new TipsDialogContext(tips, withBg, isWarning, offsetY),null,onClose);
     }
 
     public override void Show()
@@ -50,7 +62,7 @@ public class TipsDialog : Dialog<TipsDialogContext>
         withoutBgTxt.transform.DOLocalJump(tipsTxt.transform.localPosition + Vector3.up * 100, 5, 2, 2);
         frameImage.transform.DOLocalJump(tipsTxt.transform.localPosition + Vector3.up * 100, 5, 2, 2);
         frameImage.transform.localPosition = new Vector2(0,dialogContext.offsetY);
-        Timer.Register(2f, () => { Close(); });
+        Timer.Register(2f, Close);
     }
 
     protected override void OpenSound()

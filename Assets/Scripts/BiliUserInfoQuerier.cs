@@ -34,7 +34,7 @@ public class BiliUserInfoQuerier : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e);
+            Debug.Log(e+",请求链接为:"+url);
            
         }
 

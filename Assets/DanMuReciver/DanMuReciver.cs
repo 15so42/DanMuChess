@@ -10,6 +10,13 @@ using UnityEngine;
 
 public class DanMuReciver : MonoBehaviour
 {
+    public static DanMuReciver Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     //弹幕接收器
     string url = "https://api.live.bilibili.com/xlive/web-room/v1/dM/gethistory?roomid=21650919";
     HttpWebRequest request;
@@ -49,6 +56,30 @@ public class DanMuReciver : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public void ParseDanMu(ResponseResult ret)
+    {
+        //从头读取每条弹幕，直到时间大于上次读取时间，
+        for(int i = 0; i < ret.data.room.Count; i++)
+        {
+            //从头读取每条弹幕，直到时间大于上次读取时间，
+            string time= ret.data.room[i].timeline;
+            int uid = ret.data.room[i].uid;
+            long unix = GetUnixTime(time);
+            if (unix > lastReadUnix || unix>=lastReadUnix && uid!=lastReadUid)//时间大于上一次读取弹幕的时间或者uid不同
+            {
+                string name = ret.data.room[i].nickname;
+                string text = ret.data.room[i].text;
+                string str = name + " [" + time + "]: " + text;
+                Debug.Log(name + " [" + time + "]: " + text);
+                EventCenter.Broadcast(EnumEventType.OnDanMuReceived,name,uid,time,text);
+                //更新上一次读取的弹幕时间
+                lastReadUnix = unix;
+                lastReadUid = uid;
+                    
+            }
+        }
+    }
+
     IEnumerator ReciveDanMu()
     {
         while (true) { 
@@ -60,34 +91,7 @@ public class DanMuReciver : MonoBehaviour
 
             ResponseResult ret = JsonMapper.ToObject<ResponseResult>(json);
 
-            
-            
-            //从头读取每条弹幕，直到时间大于上次读取时间，
-            for(int i = 0; i < ret.data.room.Count; i++)
-            {
-                
-                string time= ret.data.room[i].timeline;
-                int uid = ret.data.room[i].uid;
-                long unix = GetUnixTime(time);
-                if (unix > lastReadUnix || unix>=lastReadUnix && uid!=lastReadUid)//时间大于上一次读取弹幕的时间或者uid不同
-                {
-                    string name = ret.data.room[i].nickname;
-                    string text = ret.data.room[i].text;
-                    string str = name + " [" + time + "]: " + text;
-                    Debug.Log(name + " [" + time + "]: " + text);
-                    EventCenter.Broadcast(EnumEventType.OnDanMuReceived,name,uid,time,text);
-                    //更新上一次读取的弹幕时间
-                    lastReadUnix = unix;
-                    lastReadUid = uid;
-                    
-                }
-            }
-            //int lastIndex = ret.data.room.Count - 1;//总弹幕数减一
-            //string lastName = ret.data.room[lastIndex].nickname;
-            //string lastTime= ret.data.room[lastIndex].timeline;
-            //string lastText = ret.data.room[lastIndex].text;//最后一次发言
-            //Debug.Log(lastName + "[" + lastTime + "]:" + lastText);
-
+            ParseDanMu(ret);
             
             yield return new WaitForSeconds(tickInterval);
         }
@@ -103,6 +107,26 @@ public class DanMuReciver : MonoBehaviour
         DateTime time = Convert.ToDateTime(timeStr);
         return time.ToUniversalTime().Ticks / 10000000 - 62135596800;
     }
+
+    public void SendFakeDanMu(string nickName,int uid,string text)
+    {
+        string time = DateTime.Now.ToString();
+        EventCenter.Broadcast(EnumEventType.OnDanMuReceived,nickName,uid,time,text);
+        
+    }
+    
+   /* // <summary>
+    /// 将Unix时间戳转换为dateTime格式
+    /// </summary>
+    /// <param name="time"></param>
+    /// <returns></returns>
+    public  DateTime UnixTimeToDateTime(long time)
+    {
+        if (time < 0)
+            throw new ArgumentOutOfRangeException("time is out of range");
+ 
+        return TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddSeconds(time);
+    }*/
 }
 
 

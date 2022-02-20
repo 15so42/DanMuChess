@@ -66,6 +66,11 @@ public class GridManager : MonoBehaviour
         return grid[(int)gridPos.x, (int)gridPos.y];
     }
 
+    public Vector3 GetWorldPosByLogicPos(Vector2Int logicPos)
+    {
+        return GetWorldPosByGirdIndex(new Vector2(logicPos.y, logicPos.x));
+    }
+
     private void OnDrawGizmos()
     {
         //return;
