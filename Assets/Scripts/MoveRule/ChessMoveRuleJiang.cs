@@ -24,7 +24,10 @@ public class ChessMoveRuleJiang : ChessMoveRule
         }
         //距离判定
         if (Vector2.Distance(startPos, endPos) > 1)
-            return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"错误走法，只能走距离为一格的斜线");
+            return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"错误走法，只能走距离为一格的直线");
+        
+        
+        
 
         return new ChessMoveResultStruct(CheckMoveResultCode.Success,"移动");
     }

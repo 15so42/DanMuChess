@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,6 +34,17 @@ public class UIManager : MonoBehaviour
     {
         accountUis.Find(x => x.player.uid == uid).RoundOver();
     }
-    
-    
+
+    public AccountUI GetAccountUiByPlayer(Player player)
+    {
+        return accountUis.Find(x => x.player == player);
+    }
+
+    public void ResetUi()
+    {
+        foreach (var accountUi in accountUis)
+        {
+            accountUi.Init();
+        }
+    }
 }

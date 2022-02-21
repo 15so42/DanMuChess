@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTeam: {fileID: 11400000, guid: 80f3bd64a628400419f7d5cb0700da0d, type: 2}
-  chessType: 0
+  chessType: 3
   logicGridPos: {x: 0, y: 0}
   moveRule: {fileID: 11400000, guid: 21e020d9130eb3841a8be4b26d78fd60, type: 2}
 --- !u!1 &3054414704703000221

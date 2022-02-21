@@ -15,24 +15,19 @@ public enum GameStatus
     WaitingJoin,//等待玩家加入
     CountDownToFight,//玩家加入完毕后倒计时
     Playing,//对局中
+    WaitingNewFighting,//对局结束，有玩家胜利，开始倒计时，倒计时结束后进入WaitingJoin状态
 }
 
 public class FightingManager : MonoBehaviour
 {
     public List<PlayerTeam> teams = new List<PlayerTeam>();
 
-
-    public PlayerTeam redTeam;
-    public PlayerTeam blackTeam;
-    
     public List<Player> players=new List<Player>();
     public int maxPlayerCount = 2;
     
     //对局状态
     public GameStatus gameStatus = GameStatus.Init;
-    //正在下棋的选手
-    [HideInInspector]
-    public PlayerTeam nowTeam ;
+    
     
     //UIManager
     public GameManager gameManager;
@@ -48,7 +43,7 @@ public class FightingManager : MonoBehaviour
         EventCenter.AddListener<string,int,string,string>(EnumEventType.OnDanMuReceived,OnDanMuReceived);
         gameStatus = GameStatus.WaitingJoin;
 
-        nowTeam = redTeam;
+        
         this.gameManager = gameManager;
         uiManager = gameManager.uiManager;
         
@@ -94,6 +89,33 @@ public class FightingManager : MonoBehaviour
             team.PlaceInitChess(GameManager.Instance);
         }
     }
+    /// <summary>
+    /// 对局结束
+    /// </summary>
+    /// <param name="winner"></param>
+    public void BattleOver(Player winner)
+    {
+        roundManager.Stop();
+        
+        gameStatus =  GameStatus.WaitingNewFighting;
+        BattleOverDialog.ShowDialog(15,winner, () =>
+        {
+            StartNewBattle();
+        });
+    }
+
+    public void StartNewBattle()
+    {
+        players.Clear();
+        uiManager.ResetUi();
+        roundManager = null;
+        gameManager.chessMoveManager.ReInit();
+        PlaceInitChess();
+
+        gameStatus = GameStatus.WaitingJoin;
+        TipsDialog.ShowDialog("✪ ω ✪棋盘初始化完成,输入加入游戏即可游玩",null);
+
+    }
     public void OnChessBoardClick(PlayerTeam playerTeam,Vector2 gridPos)
     {
         
@@ -128,6 +150,7 @@ public class Player
     public PlayerTeam playerTeam;
     public string faceUrl;
     public string top_photo;
+    
     public Player(int uid, string userName, PlayerTeam playerTeam,string faceUrl,string top_photo)
     {
         this.uid = uid;

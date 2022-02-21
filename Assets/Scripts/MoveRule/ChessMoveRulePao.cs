@@ -26,6 +26,13 @@ public class ChessMoveRulePao : ChessMoveRule
                     return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"无攻击目标");
                 }
             }
+            else
+            {
+                if (chessMoveManager.IsExitChess(endPos)) //目标位置有棋子
+                {
+                    return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape, "无法移动到目标位置");
+                }
+            }
 
         }
         return new ChessMoveResultStruct(CheckMoveResultCode.Success,"移动");
@@ -38,8 +45,9 @@ public class ChessMoveRulePao : ChessMoveRule
         {
             var step = endPos.y - startPos.y > 0 ? 1 : -1;
             int count = 0;
-            for (int i = startPos.y+step; i == endPos.y-step; i += step)
+            for (int i = startPos.y+step; step>0 ?  i <= endPos.y-step : i>=endPos.y-step; i += step)
             {
+                //Debug.Log("炮检查竖向坐标"+endPos.x+","+i);
                 if (chessMoveManager.IsExitChess(new Vector2Int(endPos.x, i)))//路途上有棋子
                 {
                     count++;
@@ -53,9 +61,9 @@ public class ChessMoveRulePao : ChessMoveRule
         {
             var step = endPos.x - startPos.x > 0 ? 1 : -1;
             int count = 0;
-            for (int i = startPos.x+step; i == endPos.x-step; i += step)
+            for (int i = startPos.x+step; step>0 ?  i <= endPos.x-step : i>=endPos.x-step; i += step)
             {
-                Debug.Log("炮检查横向坐标"+i+","+endPos.y);
+                //Debug.Log("炮检查横向坐标"+i+","+endPos.y);
                 if (chessMoveManager.IsExitChess(new Vector2Int(i, endPos.y)))//路途上有棋子
                 {
                     count++;

@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1841ddfd662cd8c4f866eae4452a8d72, type: 3}
   m_Name: RedTeam
   m_EditorClassIdentifier: 
-  id: 1
+  teamId: 0
   teamColor: {r: 1, g: 0, b: 0, a: 1}
   teamColorString: Red
   teamName: "\u961F\u4F0D\u540D"
+  inverseDirection: 1
   instaniatePath: ChessPiece/Red
   initChessTable: {fileID: 11400000, guid: 4e2b277c05c7a9d48bd71d755bdf8111, type: 2}

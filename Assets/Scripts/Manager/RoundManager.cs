@@ -54,8 +54,19 @@ public class RoundManager
         timer=Timer.Register(fightingManager.roundDuration, () =>
         {
             RoundOver(nowPlayer.uid);//结束自己回合
-            StartNewRound();
+            
         });
+        
+    }
+
+    public void Stop()
+    {
+        timer.Cancel();
+        foreach (var player in players)
+        {
+            uiManager.RoundOver(player.uid);
+        }
+        EventCenter.RemoveListener<string,int,string,string>(EnumEventType.OnDanMuReceived,OnDanMuReceived);
         
     }
 
@@ -111,15 +122,24 @@ public class RoundManager
                     {
                         uiManager.ShowMessage(uid, MoveErrorMsg);
                         return;
-                    }   
-                    if(startX==endX && startY==endY)
+                    }
+
+                    if (startX == endX && startY == endY)
+                    {
+                        uiManager.ShowMessage(uid, MoveErrorMsg);
                         return;
+                    }
+                    
                     bool moveRet=chessMoveManager.MoveChessToPos(nowPlayer.playerTeam,new Vector2Int(startX, startY), new Vector2Int(endX, endY));
                     if(moveRet){
                         RoundOver(uid); //回合结束
                     }  
                     uiManager.ShowMessage(uid, text);
                    
+                }
+                else
+                {
+                    uiManager.ShowMessage(uid, text);
                 }
                 
             } else

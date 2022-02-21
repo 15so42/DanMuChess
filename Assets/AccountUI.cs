@@ -32,9 +32,14 @@ public class AccountUI : MonoBehaviour
     
     private void Start()
     {
+        Init();
+    }
+
+    public void Init()
+    {
         fillImage.fillAmount = 0;
         countDownText.text = "";
-        nickName.text = "大爷快来玩呀";
+        nickName.text = "虚位以待";
         winRate.text = "";
         fightingManager = GameManager.Instance.fightingManager;
     }
@@ -49,15 +54,22 @@ public class AccountUI : MonoBehaviour
 
     }
 
+    public Sprite GetFaceSprite()
+    {
+        return faceImg.sprite;
+    }
+
     public void RoundOver()
     {
+        StopCoroutine(countDownCoroutine);
         fillImage.fillAmount = 0;
         countDownText.text = "";
-        StopCoroutine(countDownCoroutine);
+        
     }
 
     public void StartNewRound()
     {
+        //Debug.Log(player.userName+"开始新回合");
         fillImage.fillAmount = 1;
         countDownText.text = fightingManager.roundDuration+"";
         countDownCoroutine=StartCoroutine(CountDown(fightingManager.roundDuration));
@@ -115,6 +127,7 @@ public class AccountUI : MonoBehaviour
              
             Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
             image.sprite = sprite;
+            
         }
     }
     

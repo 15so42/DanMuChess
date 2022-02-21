@@ -10,6 +10,7 @@ public enum CheckMoveResultCode
     CantCrossRiver,//不允许过河
     Success,//可移动
     
+    
 }
 
 public struct ChessMoveResultStruct

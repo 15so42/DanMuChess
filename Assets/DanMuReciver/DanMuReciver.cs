@@ -18,7 +18,7 @@ public class DanMuReciver : MonoBehaviour
     }
 
     //弹幕接收器
-    string url = "https://api.live.bilibili.com/xlive/web-room/v1/dM/gethistory?roomid=21650919";
+    string url = "https://api.live.bilibili.com/xlive/web-room/v1/dM/gethistory?roomid=880235";
     HttpWebRequest request;
 
 

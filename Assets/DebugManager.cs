@@ -17,5 +17,28 @@ public class DebugManager : MonoBehaviour
         {
             DebugDialog.ShowDialog();
         }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Time.timeScale = 0.1f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            Time.timeScale = 1;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            BattleOverDialog.ShowDialog(15,new Player(1,"云上空",new PlayerTeam(), "ss","ss"),null );
+        }
+        
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            GameManager gameManager=GameManager.Instance;
+            FightingManager fightingManager = gameManager.fightingManager;
+            //杀掉黑方将以结束游戏
+            gameManager.chessMoveManager.GetChessByChessType(ChessType.将, fightingManager.teams[1]).OnAttacked();
+        }
     }
 }
