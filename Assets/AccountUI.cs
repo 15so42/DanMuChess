@@ -30,7 +30,7 @@ public class AccountUI : MonoBehaviour
     //协程变量
     Coroutine countDownCoroutine;
     
-    private void Start()
+    private void Awake()
     {
         Init();
     }
