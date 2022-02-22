@@ -92,6 +92,7 @@ public class RoundManager
     {
         if (nowPlayer.uid == uid)
         {
+            fightingManager.UpdateLastActiveTime(uid, Time.time);//更新上一次玩家活跃时间
             if (text.StartsWith("移动 "))
             {
                 var trim=Regex.Replace(text.Trim(), "\\s+", " ");
@@ -154,6 +155,8 @@ public class RoundManager
             if(fightingManager.players.Find(x=>x.uid==uid)==null)//无视对局外弹幕
                 return;
             uiManager.ShowMessage(uid, "[非己方回合]"+text);
+            //更新上一次玩家活跃时间
+            fightingManager.UpdateLastActiveTime(uid, Time.time);//更新上一次玩家活跃时间
         }
     }
 }
