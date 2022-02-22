@@ -85,6 +85,12 @@ public class ChessMoveManager : MonoBehaviour
             TipsDialog.ShowDialog("无可移动棋子",null);
             return false;
         }
+
+        if (chessUnit.playerTeam != playerTeam)
+        {
+            TipsDialog.ShowDialog("不可移动对方棋子",null);
+            return false;
+        }
         
         //判断是否要移动到友方棋子位置
         var endChess = GetChessUnit(endPos);
