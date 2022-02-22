@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Timers;
 using UnityEngine;
@@ -36,6 +37,7 @@ public class FightingManager : MonoBehaviour
     public RoundManager roundManager;
 
     [Header("回合时间")] public int roundDuration=45;
+    [Header("最大允许挂机时间")] public int kickOutTime = 120;
 
     public void Init(GameManager gameManager)
     {
@@ -48,6 +50,8 @@ public class FightingManager : MonoBehaviour
         uiManager = gameManager.uiManager;
         
     }
+    
+    public Dictionary<int,float> activeTimeTable=new Dictionary<int, float>(){};
 
     public void JoinGame(Player player)
     {
@@ -59,6 +63,7 @@ public class FightingManager : MonoBehaviour
             TipsDialog.ShowDialog("玩家"+player.userName+"加入了游戏",null);
             //同步UI
             uiManager.OnPlayerJoined(player,this);
+            
             
             
             
@@ -75,9 +80,49 @@ public class FightingManager : MonoBehaviour
                         roundManager=new RoundManager();
                         roundManager.Init(gameManager,players);
                         
+                        //两个玩家更新活跃表
+                        foreach (var p in players)
+                        {
+                            activeTimeTable.Add(player.uid,Time.time);
+                        }
                     });
                 });
                 
+            }
+        }
+    }
+
+    Player GetPlayerByUid(int uid)
+    {
+        return players.Find(x => x.uid == uid);
+    }
+    
+    public Player FindWinnerPlayer(PlayerTeam loseTeam)//通过输家来找到赢家
+    {
+        PlayerTeam winnerTeam= teams.Find(x => x != loseTeam);
+        Player winnerPlayer = players.Find(x => x.playerTeam == winnerTeam);
+        return winnerPlayer;
+    }
+
+    private void Update()
+    {
+        for (int i=0;i<activeTimeTable.Count;i++)
+        {
+            var kv = activeTimeTable.ElementAt(i);
+            if (Time.time - kv.Value > kickOutTime)
+            {
+                var player = GetPlayerByUid(kv.Key);
+                if (player != null)
+                {
+                    Debug.Log(player.userName+"长时间未操作，踢出");
+                    TipsDialog.ShowDialog(player.userName+"长时间未操作，踢出", () =>
+                    {
+                        var winner = FindWinnerPlayer(player.playerTeam);
+                        BattleOver(winner);
+                    });
+                   
+                }
+               
             }
         }
     }
@@ -96,6 +141,7 @@ public class FightingManager : MonoBehaviour
     public void BattleOver(Player winner)
     {
         roundManager.Stop();
+        activeTimeTable.Clear();
         
         gameStatus =  GameStatus.WaitingNewFighting;
         BattleOverDialog.ShowDialog(15,winner, () =>
@@ -119,6 +165,11 @@ public class FightingManager : MonoBehaviour
     public void OnChessBoardClick(PlayerTeam playerTeam,Vector2 gridPos)
     {
         
+    }
+
+    public void UpdateLastActiveTime(int uid, float time)
+    {
+        activeTimeTable[uid] = time;
     }
 
     private void OnDanMuReceived(string userName,int uid,string time,string text )
