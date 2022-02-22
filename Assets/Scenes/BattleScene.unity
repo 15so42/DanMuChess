@@ -2844,7 +2844,8 @@ MonoBehaviour:
   gameStatus: 0
   gameManager: {fileID: 0}
   uiManager: {fileID: 0}
-  roundDuration: 45
+  roundDuration: 90
+  kickOutTime: 190
 --- !u!1 &836750629
 GameObject:
   m_ObjectHideFlags: 0

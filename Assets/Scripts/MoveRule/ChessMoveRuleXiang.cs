@@ -34,6 +34,10 @@ public class ChessMoveRuleXiang : ChessMoveRule
         //距离判定
         if (Vector2.Distance(startPos, endPos) <=2 || Vector2.Distance(startPos, endPos) >=3)//斜线
             return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"象只能走田字");
+        if (chessMoveManager.IsExitChess(new Vector2Int((startPos.x + endPos.x) / 2, (endPos.y + startPos.y) / 2)))
+        {
+            return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"塞象眼");
+        }
 
         return new ChessMoveResultStruct(CheckMoveResultCode.Success,"移动");
     }
