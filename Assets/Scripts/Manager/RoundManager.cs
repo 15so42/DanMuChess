@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityTimer;
 
@@ -93,7 +94,8 @@ public class RoundManager
         {
             if (text.StartsWith("移动 "))
             {
-                var strArr = text.Split(' ');
+                var trim=Regex.Replace(text.Trim(), "\\s+", " ");
+                var strArr = trim.Split(' ');
                 if (strArr.Length == 3)
                 {
                     var startPosStr = strArr[1];
@@ -120,13 +122,13 @@ public class RoundManager
                     if (startX < 0 || startX > 8 || startY < 0 || startY > 9 || endX < 0 || endX > 8 || endY < 0 ||
                         endY > 9)
                     {
-                        uiManager.ShowMessage(uid, MoveErrorMsg);
+                        uiManager.ShowMessage(uid, "超出棋盘范围，请重下");
                         return;
                     }
 
                     if (startX == endX && startY == endY)
                     {
-                        uiManager.ShowMessage(uid, MoveErrorMsg);
+                        uiManager.ShowMessage(uid, "目标位置不能和起始位置相同，请重下");
                         return;
                     }
                     
@@ -149,6 +151,8 @@ public class RoundManager
         }
         else
         {
+            if(fightingManager.players.Find(x=>x.uid==uid)==null)//无视对局外弹幕
+                return;
             uiManager.ShowMessage(uid, "[非己方回合]"+text);
         }
     }

@@ -22,7 +22,12 @@ public class UIManager : MonoBehaviour
 
     public void ShowMessage(int uid, string message)
     {
-        accountUis.Find(x => x.player.uid == uid).ShowMessage(message);
+        var accountUi = accountUis.Find(x => x.player.uid == uid);
+        if (accountUi != null)
+        {
+            accountUi.ShowMessage(message);
+        }
+        
     }
 
     public void StartNewRound(int uid)

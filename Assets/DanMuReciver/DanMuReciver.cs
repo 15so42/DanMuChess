@@ -16,6 +16,9 @@ public class DanMuReciver : MonoBehaviour
     {
         Instance = this;
     }
+    
+    
+    
 
     //弹幕接收器
     string url = "https://api.live.bilibili.com/xlive/web-room/v1/dM/gethistory?roomid=880235";
@@ -54,10 +57,13 @@ public class DanMuReciver : MonoBehaviour
     {
         StartCoroutine(ReciveDanMu());
         DontDestroyOnLoad(gameObject);
+        string lastReadUnixStr = PlayerPrefs.GetString("lastReadUnix","0");
+        lastReadUnix =  Convert.ToInt64(lastReadUnixStr);
     }
 
     public void ParseDanMu(ResponseResult ret)
     {
+        lastReadUnix = Convert.ToInt64(PlayerPrefs.GetString("lastReadUnix","0"));
         //从头读取每条弹幕，直到时间大于上次读取时间，
         for(int i = 0; i < ret.data.room.Count; i++)
         {
@@ -75,6 +81,7 @@ public class DanMuReciver : MonoBehaviour
                 //更新上一次读取的弹幕时间
                 lastReadUnix = unix;
                 lastReadUid = uid;
+                PlayerPrefs.SetString("lastReadUnix",lastReadUnix+"");
                     
             }
         }
@@ -114,8 +121,15 @@ public class DanMuReciver : MonoBehaviour
         EventCenter.Broadcast(EnumEventType.OnDanMuReceived,nickName,uid,time,text);
         
     }
-    
-   /* // <summary>
+
+    private void OnDestroy()
+    {
+
+        
+        PlayerPrefs.SetInt("lastReadUnix",(int)lastReadUnix);
+    }
+
+    /* // <summary>
     /// 将Unix时间戳转换为dateTime格式
     /// </summary>
     /// <param name="time"></param>
