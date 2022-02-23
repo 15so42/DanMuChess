@@ -21,8 +21,14 @@ public class BattleOverDialogContext : DialogContext
 public class BattleOverDialog : Dialog<BattleOverDialogContext>
 {
     public TMP_Text winnerText;
+    [Header("border和container用来和棋时隐藏")]
+    public Image faceBorder;
+    public Transform faceContainer;
     public Image face;
     public TMP_Text countDownText;
+    [Header("和棋Text")]
+    public TMP_Text drawText;
+    
     
     public static void ShowDialog(int duration,Player player, Action onClose)
     {
@@ -39,9 +45,21 @@ public class BattleOverDialog : Dialog<BattleOverDialogContext>
     {
         base.Show();
         StartCoroutine(CountDown(dialogContext.duration));
-        AccountUI accountUi = GameManager.Instance.uiManager.GetAccountUiByPlayer(dialogContext.player);
-        winnerText.text = "胜者: " + accountUi.player.userName;
-        face.sprite = accountUi.faceImg.sprite;
+        if(dialogContext.player!=null){
+            drawText.gameObject.SetActive(false);
+            AccountUI accountUi = GameManager.Instance.uiManager.GetAccountUiByPlayer(dialogContext.player);
+            winnerText.text = "胜者: " + accountUi.player.userName;
+            face.sprite = accountUi.faceImg.sprite;
+        }
+        else
+        {
+            faceBorder.gameObject.SetActive(false);
+            faceContainer.gameObject.SetActive(false);
+            winnerText.gameObject.SetActive(false);
+            face.gameObject.SetActive(false);
+            drawText.gameObject.SetActive(true);
+            
+        }
     }
     
    

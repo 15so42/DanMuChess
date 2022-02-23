@@ -35,7 +35,7 @@ public class TipsDialog : Dialog<TipsDialogContext>
                 return;
             }
 
-            UnityTimer.Timer.Register(2, () =>
+            UnityTimer.Timer.Register(3, () =>
             {
                 DialogUtil.ShowDialogWithContext(nameof(TipsDialog),
                     new TipsDialogContext(tips, withBg, isWarning, offsetY), null, onClose);

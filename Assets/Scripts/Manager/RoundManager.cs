@@ -163,9 +163,24 @@ public class RoundManager
 
 
                 //uiManager.ShowMessage(uid, text);
+            }
+            else if (trim == "申请让棋")
+            {
+                TipsDialog.ShowDialog("执行让棋命令，跳转至对方回合", null);
+                RoundOver(uid);
+            }
+            else if (trim == "申请投降")
+            {
+                TipsDialog.ShowDialog(fightingManager.GetPlayerByUid(uid).userName+"申请投降", () =>
+                {
+                    fightingManager.BattleOver(fightingManager.FindWinnerPlayer(uid));
+                });
                 
-                
-            } else
+            }else if (trim == "申请和棋")
+            {
+                fightingManager.RequestDraw(uid);
+            }
+            else
             {
                 uiManager.ShowMessage(uid, text);
             }

@@ -19,6 +19,12 @@ public enum GameStatus
     WaitingNewFighting,//对局结束，有玩家胜利，开始倒计时，倒计时结束后进入WaitingJoin状态
 }
 
+public class PlayerStatus
+{
+    public float lastActiveTime = 0;
+    public bool requestDraw = false;//申请平局
+}
+
 public class FightingManager : MonoBehaviour
 {
     public List<PlayerTeam> teams = new List<PlayerTeam>();
@@ -51,7 +57,7 @@ public class FightingManager : MonoBehaviour
         
     }
     
-    public Dictionary<int,float> activeTimeTable=new Dictionary<int, float>(){};
+    public Dictionary<int,PlayerStatus> playerStatusTable=new Dictionary<int, PlayerStatus>(){};
 
     public void JoinGame(Player player)
     {
@@ -83,7 +89,11 @@ public class FightingManager : MonoBehaviour
                         //两个玩家更新活跃表
                         foreach (var p in players)
                         {
-                            activeTimeTable.Add(p.uid,Time.time);
+                            playerStatusTable.Add(p.uid,new PlayerStatus()
+                            {
+                                lastActiveTime = Time.time,
+                                requestDraw = false
+                            });
                         }
                     });
                 });
@@ -92,7 +102,7 @@ public class FightingManager : MonoBehaviour
         }
     }
 
-    Player GetPlayerByUid(int uid)
+    public Player GetPlayerByUid(int uid)
     {
         return players.Find(x => x.uid == uid);
     }
@@ -103,30 +113,52 @@ public class FightingManager : MonoBehaviour
         Player winnerPlayer = players.Find(x => x.playerTeam == winnerTeam);
         return winnerPlayer;
     }
+    
+    public Player FindWinnerPlayer(int loseUid)//通过输家来找到赢家
+    {
+        Player losePlayer = GetPlayerByUid(loseUid);
+
+        return FindWinnerPlayer(losePlayer.playerTeam);
+    }
 
     private void Update()
     {
-        if(activeTimeTable.Count==0)
+        if(playerStatusTable.Count==0)
             return;
-        for (int i=0;i<activeTimeTable.Count;i++)
+
+        var draw=true;//和棋
+        for (int i=0;i<playerStatusTable.Count;i++)
         {
-            var kv = activeTimeTable.ElementAt(i);
-            if (Time.time - kv.Value > kickOutTime)
+            var kv = playerStatusTable.ElementAt(i);
+            if (Time.time - kv.Value.lastActiveTime > kickOutTime)
             {
                 var player = GetPlayerByUid(kv.Key);
                 if (player != null)
                 {
                     Debug.Log(player.userName+"长时间未操作，踢出");
-                    activeTimeTable.Clear();
+                    playerStatusTable.Clear();
                     TipsDialog.ShowDialog(player.userName+"长时间未操作，踢出", () =>
                     {
                         var winner = FindWinnerPlayer(player.playerTeam);
                         BattleOver(winner);
                     });
+                    return;
                    
                 }
                
             }
+            
+            //和棋判定
+            if (kv.Value.requestDraw == false)
+            {
+                draw = false;
+                continue;
+            }
+        }
+
+        if (draw)
+        {
+            BattleDraw();//和棋
         }
     }
 
@@ -144,10 +176,23 @@ public class FightingManager : MonoBehaviour
     public void BattleOver(Player winner)
     {
         roundManager.Stop();
-        activeTimeTable.Clear();
+        playerStatusTable.Clear();
         
         gameStatus =  GameStatus.WaitingNewFighting;
         BattleOverDialog.ShowDialog(15,winner, () =>
+        {
+            StartNewBattle();
+        });
+    }
+    
+    //和棋
+    public void BattleDraw()
+    {
+        roundManager.Stop();
+        playerStatusTable.Clear();
+        
+        gameStatus =  GameStatus.WaitingNewFighting;
+        BattleOverDialog.ShowDialog(15,null, () =>//赢家为空时即是和棋
         {
             StartNewBattle();
         });
@@ -172,13 +217,20 @@ public class FightingManager : MonoBehaviour
 
     public void UpdateLastActiveTime(int uid, float time)
     {
-        activeTimeTable[uid] = time;
+        playerStatusTable[uid].lastActiveTime = time;
+    }
+
+    public void RequestDraw(int uid)
+    {
+        Player player = GetPlayerByUid(uid);
+        TipsDialog.ShowDialog(player.userName+"申请和棋，双方均申请则游戏结束",null);
+        playerStatusTable[uid].requestDraw = true;
     }
 
     private void OnDanMuReceived(string userName,int uid,string time,string text )
     {
         //找到队伍
-        if (text.Split(' ')[0] == "加入"||text.Split(' ')[0] == "加入游戏")
+        if (gameStatus==GameStatus.WaitingJoin && text.Split(' ')[0] == "加入"||text.Split(' ')[0] == "加入游戏")
         {
             if (gameStatus == GameStatus.WaitingJoin)
             {

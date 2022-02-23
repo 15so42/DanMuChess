@@ -61,7 +61,8 @@ public class AccountUI : MonoBehaviour
 
     public void RoundOver()
     {
-        StopCoroutine(countDownCoroutine);
+        if(countDownCoroutine!=null)
+            StopCoroutine(countDownCoroutine);
         fillImage.fillAmount = 0;
         countDownText.text = "";
         
