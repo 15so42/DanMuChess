@@ -93,57 +93,77 @@ public class RoundManager
         if (nowPlayer.uid == uid)
         {
             fightingManager.UpdateLastActiveTime(uid, Time.time);//更新上一次玩家活跃时间
-            if (text.StartsWith("移动 "))
+
+            var trim=Regex.Replace(text.Trim(), "\\s+", "");//去除所有空格
+            string movePattern = @"^(移动)??\d{4}$";
+            
+            if (Regex.IsMatch(trim,movePattern))
             {
-                var trim=Regex.Replace(text.Trim(), "\\s+", " ");
-                var strArr = trim.Split(' ');
-                if (strArr.Length == 3)
+                Debug.Log("移动命令Trim:"+trim);
+                var startPosStr = "";
+                var endPosStr = "";
+                if (Regex.IsMatch(trim, "^(移动){1}"))
                 {
-                    var startPosStr = strArr[1];
-                    var endPosStr = strArr[2];
-
-                    if (String.IsNullOrEmpty(startPosStr) || String.IsNullOrEmpty(endPosStr))
-                    {
-                        uiManager.ShowMessage(uid, MoveErrorMsg);
-                        return;
-                    }
-
-                    if (startPosStr.Length < 2 || endPosStr.Length < 2)
-                    {
-                        uiManager.ShowMessage(uid, MoveErrorMsg);
-                        return;
-                    }
-
-                    var startX = Int32.Parse(startPosStr[0].ToString());
-                    var startY = Int32.Parse(startPosStr[1].ToString());
-
-                    var endX = Int32.Parse(endPosStr[0].ToString());
-                    var endY = Int32.Parse(endPosStr[1].ToString());
-
-                    if (startX < 0 || startX > 8 || startY < 0 || startY > 9 || endX < 0 || endX > 8 || endY < 0 ||
-                        endY > 9)
-                    {
-                        uiManager.ShowMessage(uid, "超出棋盘范围，请重下");
-                        return;
-                    }
-
-                    if (startX == endX && startY == endY)
-                    {
-                        uiManager.ShowMessage(uid, "目标位置不能和起始位置相同，请重下");
-                        return;
-                    }
-                    
-                    bool moveRet=chessMoveManager.MoveChessToPos(nowPlayer.playerTeam,new Vector2Int(startX, startY), new Vector2Int(endX, endY));
-                    if(moveRet){
-                        RoundOver(uid); //回合结束
-                    }  
-                    uiManager.ShowMessage(uid, text);
-                   
+                    startPosStr = trim.Substring(2,2);
+                    endPosStr = trim.Substring(4, 2);
                 }
                 else
                 {
-                    uiManager.ShowMessage(uid, text);
+                    startPosStr = trim.Substring(0,2);
+                    endPosStr = trim.Substring(2, 2);
                 }
+
+
+                if (String.IsNullOrEmpty(startPosStr) || String.IsNullOrEmpty(endPosStr))
+                {
+                    uiManager.ShowMessage(uid, MoveErrorMsg);
+                    return;
+                }
+
+                if (startPosStr.Length != 2 || endPosStr.Length != 2)
+                {
+                    uiManager.ShowMessage(uid, MoveErrorMsg);
+                    return;
+                }
+
+                string pattern = @"\d{2}";
+                if (Regex.IsMatch(startPosStr, pattern) == false || Regex.IsMatch(endPosStr, pattern) == false) //移动命令出错
+                {
+                    uiManager.ShowMessage(uid, MoveErrorMsg);
+                    return;
+                }
+
+                var startX = Int32.Parse(startPosStr[0].ToString());
+                var startY = Int32.Parse(startPosStr[1].ToString());
+
+                var endX = Int32.Parse(endPosStr[0].ToString());
+                var endY = Int32.Parse(endPosStr[1].ToString());
+
+                if (startX < 0 || startX > 8 || startY < 0 || startY > 9 || endX < 0 || endX > 8 || endY < 0 ||
+                    endY > 9)
+                {
+                    uiManager.ShowMessage(uid, "超出棋盘范围，请重下");
+                    return;
+                }
+
+                if (startX == endX && startY == endY)
+                {
+                    uiManager.ShowMessage(uid, "目标位置不能和起始位置相同，请重下");
+                    return;
+                }
+
+                bool moveRet = chessMoveManager.MoveChessToPos(nowPlayer.playerTeam, new Vector2Int(startX, startY),
+                    new Vector2Int(endX, endY));
+                if (moveRet)
+                {
+                    RoundOver(uid); //回合结束
+                }
+
+                uiManager.ShowMessage(uid, text);
+
+
+                //uiManager.ShowMessage(uid, text);
+                
                 
             } else
             {

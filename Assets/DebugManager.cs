@@ -23,7 +23,7 @@ public class DebugManager : MonoBehaviour
             Time.timeScale = 0.1f;
         }
 
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             Time.timeScale = 1;
         }
