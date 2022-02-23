@@ -81,7 +81,7 @@ public class FightingManager : MonoBehaviour
                     gameStatus = GameStatus.CountDownToFight;
                     CountDownDialog.ShowDialog(3, () =>
                     {
-                        TipsDialog.ShowDialog("红方先手",null);
+                        TipsDialog.ShowDialog("黑方先手",null);
                         gameStatus = GameStatus.Playing;
                         roundManager=new RoundManager();
                         roundManager.Init(gameManager,players);

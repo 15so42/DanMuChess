@@ -27,7 +27,7 @@ public class RoundManager
     public void Init(GameManager gameManager ,List<Player> players)
     {
         this.players = players;
-        nowPlayer = players[0];
+        nowPlayer = players[1];
         this.gameManager = gameManager;
         this.fightingManager = gameManager.fightingManager;
         this.chessMoveManager = gameManager.chessMoveManager;
@@ -38,7 +38,7 @@ public class RoundManager
 
     Player GetPlayerByRound()//根据回合数决定当前活动队伍
     {
-        return players[roundCount % players.Count];
+        return players[(roundCount+1) % players.Count];
     }
 
     public void StartFight()
@@ -84,8 +84,19 @@ public class RoundManager
         timer.Cancel();
         StartNewRound();
     }
-    
-    
+
+    string GetPosByLetterStr(string posStr)//字母转换坐标
+    {
+        byte[] array = new byte[2];   //定义一组数组array
+        array = System.Text.Encoding.ASCII.GetBytes(posStr); //string转换的字母
+        int asciicode = (short)(array[0]);
+        var firstChar = Convert.ToString(asciicode-65); //将转换一的ASCII码转换成string型
+                        
+        int asciicode1 = (short)(array[1]);
+        var secondChar = Convert.ToString(asciicode1-65); //将转换一的ASCII码转换成string型
+
+        return firstChar + secondChar;
+    }
 
     //解析命令
     private void ParseCommand(int uid,string text)
@@ -95,7 +106,7 @@ public class RoundManager
             fightingManager.UpdateLastActiveTime(uid, Time.time);//更新上一次玩家活跃时间
 
             var trim=Regex.Replace(text.Trim(), "\\s+", "");//去除所有空格
-            string movePattern = @"^(移动)??\d{4}$";
+            string movePattern = @"^(移动)??(\d{4}|[A-J]{4})$";
             
             if (Regex.IsMatch(trim,movePattern))
             {
@@ -129,8 +140,30 @@ public class RoundManager
                 string pattern = @"\d{2}";
                 if (Regex.IsMatch(startPosStr, pattern) == false || Regex.IsMatch(endPosStr, pattern) == false) //移动命令出错
                 {
-                    uiManager.ShowMessage(uid, MoveErrorMsg);
-                    return;
+                    //如果不是数字而是字母，将字母转数字
+                    string letterPattern = @"[A-J]{2}";
+                    if (Regex.IsMatch(startPosStr, letterPattern))
+                    {
+                        startPosStr = GetPosByLetterStr(startPosStr);
+                        
+                    }
+                    else
+                    {
+                        uiManager.ShowMessage(uid, MoveErrorMsg);
+                        return;
+                    }
+                    
+                    if (Regex.IsMatch(endPosStr, letterPattern))
+                    {
+                        endPosStr = GetPosByLetterStr(endPosStr);
+                        
+                    }
+                    else
+                    {
+                        uiManager.ShowMessage(uid, MoveErrorMsg);
+                        return;
+                    }
+                   
                 }
 
                 var startX = Int32.Parse(startPosStr[0].ToString());
