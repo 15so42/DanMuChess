@@ -44,11 +44,24 @@ public class DanMuReciver : MonoBehaviour
 
     public string Response()
     {
-        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-        using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+        string result = null;
+        try
         {
-            return reader.ReadToEnd();
+            HttpWebResponse response = (HttpWebResponse) request.GetResponse();
+            using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+            {
+                result= reader.ReadToEnd();
+            }
+        } catch (WebException wex)
+        {
+            using (var streamReader = new StreamReader(wex.Response.GetResponseStream()))
+            {
+                Debug.Log("[[[[[[[[Response异常处理");
+                result = streamReader.ReadToEnd();
+            }
         }
+
+        return result;
 
     }
     
