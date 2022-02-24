@@ -106,7 +106,7 @@ public class RoundManager
             fightingManager.UpdateLastActiveTime(uid, Time.time);//更新上一次玩家活跃时间
 
             var trim=Regex.Replace(text.Trim(), "\\s+", "");//去除所有空格
-            string movePattern = @"^(移动)??(\d{4}|[A-J]{4})$";
+            string movePattern = @"^(移动)??(\d{4}|([A-J]|[a-j]){4})$";
             
             if (Regex.IsMatch(trim,movePattern))
             {
@@ -141,9 +141,10 @@ public class RoundManager
                 if (Regex.IsMatch(startPosStr, pattern) == false || Regex.IsMatch(endPosStr, pattern) == false) //移动命令出错
                 {
                     //如果不是数字而是字母，将字母转数字
-                    string letterPattern = @"[A-J]{2}";
+                    string letterPattern = @"([A-J]|[a-j]){2}";
                     if (Regex.IsMatch(startPosStr, letterPattern))
                     {
+                        startPosStr = startPosStr.ToUpper();
                         startPosStr = GetPosByLetterStr(startPosStr);
                         
                     }
@@ -155,6 +156,7 @@ public class RoundManager
                     
                     if (Regex.IsMatch(endPosStr, letterPattern))
                     {
+                        endPosStr = endPosStr.ToUpper();
                         endPosStr = GetPosByLetterStr(endPosStr);
                         
                     }
