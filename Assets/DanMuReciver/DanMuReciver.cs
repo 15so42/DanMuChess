@@ -42,6 +42,7 @@ public class DanMuReciver : MonoBehaviour
         request.ContentType = "application/x-www-form-urlencoded;charset=UTF-8";
     }
 
+    private UnityTimer.Timer reconnectTimer;
     public string Response()
     {
         string result = null;
@@ -54,10 +55,11 @@ public class DanMuReciver : MonoBehaviour
             }
         } catch (WebException wex)
         {
-            using (var streamReader = new StreamReader(wex.Response.GetResponseStream()))
+            if (wex != null)
             {
-                Debug.Log("[[[[[[[[Response异常处理");
-                result = streamReader.ReadToEnd();
+
+                Debug.LogError("网络暂时出现异常，请稍后");
+
             }
         }
 
@@ -105,6 +107,13 @@ public class DanMuReciver : MonoBehaviour
         while (true) { 
             SetRequest();
             string json = Response();
+
+            if (json == null)
+            {
+                yield return new WaitForSeconds(tickInterval);
+                //网络获取失败，跳过，三秒后继续获取
+                continue;
+            }
 
             if(debugMode)
                 Debug.Log(json);
