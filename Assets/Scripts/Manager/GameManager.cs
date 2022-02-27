@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
         //moveChessManager.Init();
         //设置帧率为30fps
         Application.targetFrameRate = 30;
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }
 
   

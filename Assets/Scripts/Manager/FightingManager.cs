@@ -23,6 +23,7 @@ public class PlayerStatus
 {
     public float lastActiveTime = 0;
     public bool requestDraw = false;//申请平局
+   
 }
 
 public class FightingManager : MonoBehaviour
@@ -44,6 +45,8 @@ public class FightingManager : MonoBehaviour
 
     [Header("回合时间")] public int roundDuration=45;
     [Header("最大允许挂机时间")] public int kickOutTime = 120;
+    [Header("玩家最大匹配时间")] public int maxWaitingPlayerTime=240;
+    private float firstPlayerJoinTime = 10;
 
     public void Init(GameManager gameManager)
     {
@@ -64,7 +67,10 @@ public class FightingManager : MonoBehaviour
         if (players.Count < maxPlayerCount && !players.Contains(player) && players.Find(x=>x.uid==player.uid)==null )
         {
             players.Add(player);
-            
+            if (players.Count == 1)
+            {
+                firstPlayerJoinTime = Time.time;
+            }
             Debug.Log("玩家"+player.userName+"加入了游戏");
             TipsDialog.ShowDialog("玩家"+player.userName+"加入了游戏",null);
             //同步UI
@@ -81,7 +87,7 @@ public class FightingManager : MonoBehaviour
                     gameStatus = GameStatus.CountDownToFight;
                     CountDownDialog.ShowDialog(3, () =>
                     {
-                        TipsDialog.ShowDialog("黑方先手",null);
+                        TipsDialog.ShowDialog("红方先手",null);
                         gameStatus = GameStatus.Playing;
                         roundManager=new RoundManager();
                         roundManager.Init(gameManager,players);
@@ -106,11 +112,13 @@ public class FightingManager : MonoBehaviour
     {
         return players.Find(x => x.uid == uid);
     }
+
     
-    public Player FindWinnerPlayer(PlayerTeam loseTeam)//通过输家来找到赢家
+    public Player FindAnotherPlayer(PlayerTeam loseTeam)//通过输家来找到赢家
     {
         PlayerTeam winnerTeam= teams.Find(x => x != loseTeam);
         Player winnerPlayer = players.Find(x => x.playerTeam == winnerTeam);
+
         return winnerPlayer;
     }
     
@@ -118,47 +126,66 @@ public class FightingManager : MonoBehaviour
     {
         Player losePlayer = GetPlayerByUid(loseUid);
 
-        return FindWinnerPlayer(losePlayer.playerTeam);
+        return FindAnotherPlayer(losePlayer.playerTeam);
     }
 
     private void Update()
     {
-        if(playerStatusTable.Count==0)
-            return;
+        
 
         var draw=true;//和棋
-        for (int i=0;i<playerStatusTable.Count;i++)
+
+        //Debug.Log(gameStatus);
+        if (gameStatus == GameStatus.WaitingJoin)
         {
-            var kv = playerStatusTable.ElementAt(i);
-            if (Time.time - kv.Value.lastActiveTime > kickOutTime)
+            //Debug.Log((players.Count == 1) + "," + firstPlayerJoinTime+","+maxWaitingPlayerTime);
+            if(players.Count==1 && Time.time > firstPlayerJoinTime+maxWaitingPlayerTime)
             {
-                var player = GetPlayerByUid(kv.Key);
-                if (player != null)
-                {
-                    Debug.Log(player.userName+"长时间未操作，踢出");
-                    playerStatusTable.Clear();
-                    TipsDialog.ShowDialog(player.userName+"长时间未操作，踢出", () =>
-                    {
-                        var winner = FindWinnerPlayer(player.playerTeam);
-                        BattleOver(winner);
-                    });
-                    return;
-                   
-                }
-               
-            }
-            
-            //和棋判定
-            if (kv.Value.requestDraw == false)
-            {
-                draw = false;
-                continue;
+                TipsDialog.ShowDialog(players[0].userName + "等待状态失效，请重新加入", () => {
+                    players.Clear();
+                    uiManager.ResetUi();
+                });
             }
         }
 
-        if (draw)
+
+        if (gameStatus == GameStatus.Playing)
         {
-            BattleDraw();//和棋
+
+            for (int i = 0; i < playerStatusTable.Count; i++)
+            {
+                var kv = playerStatusTable.ElementAt(i);
+                if (Time.time - kv.Value.lastActiveTime > kickOutTime)
+                {
+                    var player = GetPlayerByUid(kv.Key);
+                    if (player != null)
+                    {
+                        Debug.Log(player.userName + "长时间未操作，踢出");
+                        playerStatusTable.Clear();
+                        TipsDialog.ShowDialog(player.userName + "长时间未操作，踢出", () =>
+                          {
+                              var winner = FindAnotherPlayer(player.playerTeam);
+
+                              BattleOver(winner);
+                          });
+                        return;
+
+                    }
+
+                }
+
+                //和棋判定
+                if (kv.Value.requestDraw == false)
+                {
+                    draw = false;
+                    continue;
+                }
+            }
+
+            if (draw && playerStatusTable.Count>0)
+            {
+                BattleDraw();//和棋
+            }
         }
     }
 
@@ -179,6 +206,7 @@ public class FightingManager : MonoBehaviour
         playerStatusTable.Clear();
         
         gameStatus =  GameStatus.WaitingNewFighting;
+
         BattleOverDialog.ShowDialog(15,winner, () =>
         {
             StartNewBattle();

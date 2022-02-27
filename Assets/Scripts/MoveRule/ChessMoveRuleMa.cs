@@ -32,7 +32,7 @@ public class ChessMoveRuleMa : ChessMoveRule
                 return new ChessMoveResultStruct(CheckMoveResultCode.CantCrossRiver,"只能移动到偶数行");
         }*/
         //距离判定
-        if (Vector2.Distance(startPos, endPos) <=2 || Vector2.Distance(startPos, endPos) >=3)//斜线
+        if (Vector2.Distance(startPos, endPos) <=2 || Vector2.Distance(startPos, endPos) >=2.4)//斜线，日字距离为2.23
             return new ChessMoveResultStruct(CheckMoveResultCode.InvalidShape,"马只能走日字");
         
         //判断绊脚马

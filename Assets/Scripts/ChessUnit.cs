@@ -24,7 +24,7 @@ public class ChessUnit : MonoBehaviour
 
     public ChessMoveRule moveRule;
     //死亡动画参数
-    float jumpPower = 15f;
+    float jumpPower = 4f;
 
     public void Init(PlayerTeam playerTeam,  Vector2Int logicGridPos)
     {
@@ -47,8 +47,8 @@ public class ChessUnit : MonoBehaviour
         //从逻辑棋盘中删除
         GameManager.Instance.chessMoveManager.SetChess(logicGridPos,null);
         Sequence sequence = DOTween.Sequence();
-        sequence.Append(transform.DOJump(transform.position + Vector3.up*jumpPower, jumpPower, 1, 1f));
-        sequence.Insert(0, transform.DOPunchRotation(new Vector3(-180, 0, 0), 1f));
+        sequence.Append(transform.DOJump(transform.position + Vector3.up*jumpPower, jumpPower, 2, 1.3f));
+        sequence.Insert(0, transform.DOPunchRotation(new Vector3(-180, 0, 0), 1.3f));
         //sequence.Join(transform.DOScale(Vector3.zero, 0.5f));
         sequence.OnComplete(() =>
         {

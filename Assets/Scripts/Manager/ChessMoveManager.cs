@@ -148,7 +148,16 @@ public class ChessMoveManager : MonoBehaviour
         //终点位置设置新棋子
         SetChess(endPos,chessUnit);
         chessUnit.OnMoveEnd(endPos);
-        
+
+        //将军判定
+        var fightingManager = GameManager.Instance.fightingManager;
+        var enemyJiang= GetChessByChessType(ChessType.将,fightingManager.FindAnotherPlayer(chessUnit.playerTeam).playerTeam);
+        //Debug.Log(enemyJiang + "," + enemyJiang.logicGridPos);
+        if(enemyJiang!=null && chessUnit!=null && chessUnit.moveRule.Check(chessUnit.playerTeam, endPos, enemyJiang.logicGridPos).code == CheckMoveResultCode.Success)
+        {
+            TipsDialog.ShowDialog("将军，请注意", null);
+        }
+
         //增加将不能面对面的全局判定，如果移动后使自己的将在对面的将在对面，则游戏结束，同时需要再将移动时要求不能移动到面对面的位置
         var jiangChess = GetChessByChessType(ChessType.将, chessUnit.playerTeam);
         if (jiangChess != null)

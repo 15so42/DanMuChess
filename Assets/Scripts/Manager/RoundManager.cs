@@ -38,7 +38,7 @@ public class RoundManager
 
     Player GetPlayerByRound()//根据回合数决定当前活动队伍
     {
-        return players[(roundCount+1) % players.Count];
+        return players[(roundCount+0) % players.Count];
     }
 
     public void StartFight()

@@ -38,12 +38,14 @@ public class BattleOverDialog : Dialog<BattleOverDialogContext>
             return;
         }
 
+
         DialogUtil.ShowDialogWithContext(nameof(BattleOverDialog), new BattleOverDialogContext(duration, player),null,onClose);
     }
 
     public override void Show()
     {
         base.Show();
+
         StartCoroutine(CountDown(dialogContext.duration));
         if(dialogContext.player!=null){
             drawText.gameObject.SetActive(false);

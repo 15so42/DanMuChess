@@ -16,8 +16,8 @@ public class DanMuReciver : MonoBehaviour
     {
         Instance = this;
     }
-    
-    
+
+    public List<string> lastMessageStrList = new List<string>();
     
 
     //弹幕接收器
@@ -27,7 +27,7 @@ public class DanMuReciver : MonoBehaviour
 
     //全局变量
     long lastReadUnix;//可能每次检测之间有多条弹幕，从上一次读取时间以后读取之后的所有弹幕
-    int lastReadUid;
+    //int lastReadUid =0;
 
 
     public float tickInterval=5f;//轮询间隔
@@ -86,18 +86,39 @@ public class DanMuReciver : MonoBehaviour
             string time= ret.data.room[i].timeline;
             int uid = ret.data.room[i].uid;
             long unix = GetUnixTime(time);
-            if (unix > lastReadUnix || unix>=lastReadUnix && uid!=lastReadUid)//时间大于上一次读取弹幕的时间或者uid不同
+            
+            if (unix>=lastReadUnix )//时间大于上一次读取弹幕的时间或者uid不同
             {
+                       
                 string name = ret.data.room[i].nickname;
                 string text = ret.data.room[i].text;
                 string str = name + " [" + time + "]: " + text;
-                Debug.Log(name + " [" + time + "]: " + text);
+                
+                //如果上一次读取是最后两次发言是同一秒，就会出现新的读取时重复读取的问题.
+                //因此读取时记录最后一秒中的发言，在新的读取循环时判断之前的最后一秒中是否有新的发言，如果是之前的重复发言，则跳过，如果不是，比如说上一次读取两条发言
+                //后又有用户在之前的最后一秒发送了第三条弹幕，则从第三条发言开始读取，这也是不能简单的把新循环的时间设置为之前的最后一秒的时间加一秒的原因。
+                if (unix == lastReadUnix && lastMessageStrList.Contains(str))
+                {
+                    continue;
+                }
+
+                Debug.Log(str);
                 EventCenter.Broadcast(EnumEventType.OnDanMuReceived,name,uid,time,text);
                 //更新上一次读取的弹幕时间
+                if (unix > lastReadUnix)
+                {
+                    lastMessageStrList.Clear();
+                }
+                else
+                {
+                    Debug.Log("检测到同一秒发言");
+                }
+                lastMessageStrList.Add(str);//存储最后一秒的uid
+
                 lastReadUnix = unix;
-                lastReadUid = uid;
+                //lastReadUid = uid;
                 PlayerPrefs.SetString("lastReadUnix",lastReadUnix+"");
-                    
+                
             }
         }
     }
@@ -191,4 +212,5 @@ public class Room
     public int uid;
     public string nickname;
     public string timeline;
+    public bool readStatus = false;
 }
